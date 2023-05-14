@@ -11,26 +11,21 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
-@Preview
+
 @Composable
-fun BottomBar(){
-  var selectedItem by remember {
-    mutableStateOf(0)
-  }
+fun BottomBar(
+  items: List<BottomBarItem>,
+  navController: NavController
+){
 
-  val items = listOf(
-    BottomBarItem.Home,
-    BottomBarItem.ShoppingList,
-    BottomBarItem.Stock,
-  )
   NavigationBar(
     modifier = Modifier.fillMaxWidth(),
     containerColor = MaterialTheme.colorScheme.primary,
@@ -41,12 +36,20 @@ fun BottomBar(){
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
       ){
-        items.forEachIndexed { index, item ->
+        items.forEach { item ->
           NavigationBarItem(
             icon = { Icon(item.icon, item.title)},
             label = { Text(item.title)},
-            selected = selectedItem == index,
-            onClick = { selectedItem = index },
+            selected = item.route == navController.currentBackStackEntryAsState().value?.destination?.route,
+            onClick = {
+              navController.navigate(item.route){
+                popUpTo(navController.graph.findStartDestination().id){
+                  saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+              }
+            },
             colors = NavigationBarItemDefaults.colors(
               selectedIconColor = MaterialTheme.colorScheme.primary,
               selectedTextColor = MaterialTheme.colorScheme.onPrimary,
@@ -59,4 +62,16 @@ fun BottomBar(){
       }
     }
   )
+}
+
+@Preview
+@Composable
+fun BottomBarPreview(){
+  val items = listOf(
+    BottomBarItem.Home,
+    BottomBarItem.ShoppingList,
+    BottomBarItem.Stock,
+  )
+  val navController = rememberNavController()
+  BottomBar(items = items, navController)
 }

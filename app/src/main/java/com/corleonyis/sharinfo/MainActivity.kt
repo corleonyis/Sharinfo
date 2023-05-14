@@ -2,23 +2,29 @@ package com.corleonyis.sharinfo
 
 import AppBar
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.corleonyis.sharinfo.ui.theme.SharinfoTheme
 
 class MainActivity : ComponentActivity() {
+  private val items = listOf(
+    BottomBarItem.Home,
+    BottomBarItem.ShoppingList,
+    BottomBarItem.Stock,
+  )
+
+  @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
@@ -28,48 +34,59 @@ class MainActivity : ComponentActivity() {
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.primary
         ) {
-          MainScreen()
+          val navController = rememberNavController()
+
+          Scaffold(
+            topBar = { AppBar() },
+            bottomBar = { BottomBar(
+              items = items,
+              navController = navController
+            ) },
+          ){
+            NavHost(navController = navController, startDestination = BottomBarItem.Home.route){
+              composable(route = BottomBarItem.Home.route){
+                HomeScreen()
+              }
+              composable(route = BottomBarItem.ShoppingList.route){
+                ShoppingListScreen()
+              }
+              composable(route = BottomBarItem.Stock.route){
+                StockListScreen()
+              }
+            }
+          }
         }
       }
     }
   }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun MainScreen(){
-  Scaffold(
-    topBar = { AppBar() },
-    bottomBar = { BottomBar() },
-    content = { innerPadding ->
-      LazyColumn(
-        contentPadding = innerPadding,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-      ) {
-        val list = (0..75).map { it.toString() }
-        items(count = list.size) {
-          Text(
-            text = list[it],
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(horizontal = 16.dp)
-          )
-        }
-      }
-    }
-  )
-}
-@Composable
-fun Greeting(name: String) {
-  Text(text = "Hello $name!")
+fun HomeScreen(){
+  Column(
+    modifier = Modifier.fillMaxSize(),
+    verticalArrangement = Arrangement.Center
+  ) {
+    Text(text = "Home Screen")
+  }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-  SharinfoTheme {
-    Greeting("Android")
+fun ShoppingListScreen(){
+  Column(
+    modifier = Modifier.fillMaxSize(),
+    verticalArrangement = Arrangement.Center
+  ) {
+    Text(text = "Shopping List Screen")
+  }
+}
+
+@Composable
+fun StockListScreen(){
+  Column(
+    modifier = Modifier.fillMaxSize(),
+    verticalArrangement = Arrangement.Center
+  ) {
+    Text(text = "Stock List Screen")
   }
 }
