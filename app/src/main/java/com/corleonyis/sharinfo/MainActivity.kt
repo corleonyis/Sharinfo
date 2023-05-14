@@ -1,6 +1,8 @@
 package com.corleonyis.sharinfo
 
 import AppBar
+import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.corleonyis.sharinfo.ui.theme.SharinfoTheme
 
 class MainActivity : ComponentActivity() {
-  @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
@@ -25,34 +26,41 @@ class MainActivity : ComponentActivity() {
         // A surface container using the 'background' color from the theme
         Surface(
           modifier = Modifier.fillMaxSize(),
-          color = MaterialTheme.colorScheme.background
+          color = MaterialTheme.colorScheme.primary
         ) {
-          Scaffold(
-            topBar = { AppBar() },
-            content = { innerPadding ->
-              LazyColumn(
-                contentPadding = innerPadding,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-              ) {
-                val list = (0..75).map { it.toString() }
-                items(count = list.size) {
-                  Text(
-                    text = list[it],
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                      .fillMaxWidth()
-                      .padding(horizontal = 16.dp)
-                  )
-                }
-              }
-            }
-          )
+          MainScreen()
         }
       }
     }
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun MainScreen(){
+  Scaffold(
+    topBar = { AppBar() },
+    bottomBar = { BottomBar() },
+    content = { innerPadding ->
+      LazyColumn(
+        contentPadding = innerPadding,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
+        val list = (0..75).map { it.toString() }
+        items(count = list.size) {
+          Text(
+            text = list[it],
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 16.dp)
+          )
+        }
+      }
+    }
+  )
+}
 @Composable
 fun Greeting(name: String) {
   Text(text = "Hello $name!")
