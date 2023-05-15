@@ -1,5 +1,6 @@
 package com.corleonyis.sharinfo
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +23,7 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun BottomBar(
-  items: List<BottomBarItem>,
+  items: List<BarItem>,
   navController: NavController
 ){
 
@@ -37,10 +38,17 @@ fun BottomBar(
         verticalAlignment = Alignment.CenterVertically
       ){
         items.forEach { item ->
+          val selected = item.route == navController.currentBackStackEntryAsState().value?.destination?.route
           NavigationBarItem(
-            icon = { Icon(item.icon, item.title)},
+            icon = {
+              if(selected){
+                Icon( item.selectedIcon, item.title)
+              } else {
+                Icon( item.icon, item.title)
+              }
+            },
             label = { Text(item.title)},
-            selected = item.route == navController.currentBackStackEntryAsState().value?.destination?.route,
+            selected = selected,
             onClick = {
               navController.navigate(item.route){
                 popUpTo(navController.graph.findStartDestination().id){
@@ -54,8 +62,8 @@ fun BottomBar(
               selectedIconColor = MaterialTheme.colorScheme.primary,
               selectedTextColor = MaterialTheme.colorScheme.onPrimary,
               indicatorColor = MaterialTheme.colorScheme.onPrimary,
-              unselectedIconColor = MaterialTheme.colorScheme.inversePrimary,
-              unselectedTextColor = MaterialTheme.colorScheme.inversePrimary
+              unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
+              unselectedTextColor = MaterialTheme.colorScheme.onPrimary
             )
           )
         }
@@ -64,13 +72,17 @@ fun BottomBar(
   )
 }
 
-@Preview
+@Preview(
+  name = "Light Mode",
+  showBackground = true,
+  uiMode = UI_MODE_NIGHT_NO
+)
 @Composable
 fun BottomBarPreview(){
   val items = listOf(
-    BottomBarItem.Home,
-    BottomBarItem.ShoppingList,
-    BottomBarItem.Stock,
+    BarItem.Home,
+    BarItem.ShoppingList,
+    BarItem.Stock,
   )
   val navController = rememberNavController()
   BottomBar(items = items, navController)

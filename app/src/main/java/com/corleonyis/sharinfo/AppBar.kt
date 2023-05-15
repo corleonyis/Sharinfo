@@ -1,5 +1,6 @@
+package com.corleonyis.sharinfo
+
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -8,17 +9,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.corleonyis.sharinfo.ui.theme.SharinfoTheme
 
-@Preview
+
 @Composable
-fun AppBar() {
-  SharinfoTheme() {
+fun AppBar(
+  navController: NavController
+) {
+  SharinfoTheme {
     Surface(
       color = MaterialTheme.colorScheme.primary
     ) {
@@ -39,7 +41,9 @@ fun AppBar() {
           }
         },
         actions = {
-          IconButton(onClick = { /*TODO*/ }) {
+          IconButton(onClick = {
+            navController.navigate(BarItem.Setting.route)
+          }) {
             Icon(
               imageVector = Icons.Filled.Settings,
               contentDescription = "Localized description"

@@ -1,6 +1,5 @@
 package com.corleonyis.sharinfo
 
-import AppBar
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,9 +17,9 @@ import com.corleonyis.sharinfo.ui.theme.SharinfoTheme
 
 class MainActivity : ComponentActivity() {
   private val items = listOf(
-    BottomBarItem.Home,
-    BottomBarItem.ShoppingList,
-    BottomBarItem.Stock,
+    BarItem.Home,
+    BarItem.ShoppingList,
+    BarItem.Stock,
   )
 
   @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -37,21 +36,30 @@ class MainActivity : ComponentActivity() {
           val navController = rememberNavController()
 
           Scaffold(
-            topBar = { AppBar() },
-            bottomBar = { BottomBar(
-              items = items,
-              navController = navController
-            ) },
+            topBar = {
+              AppBar(
+                navController = navController
+              )
+            },
+            bottomBar = {
+              BottomBar(
+                items = items,
+                navController = navController
+              )
+            },
           ){
-            NavHost(navController = navController, startDestination = BottomBarItem.Home.route){
-              composable(route = BottomBarItem.Home.route){
+            NavHost(navController = navController, startDestination = BarItem.Home.route){
+              composable(route = BarItem.Home.route){
                 HomeScreen()
               }
-              composable(route = BottomBarItem.ShoppingList.route){
+              composable(route = BarItem.ShoppingList.route){
                 ShoppingListScreen()
               }
-              composable(route = BottomBarItem.Stock.route){
+              composable(route = BarItem.Stock.route){
                 StockListScreen()
+              }
+              composable(route = BarItem.Setting.route){
+                SettingScreen()
               }
             }
           }
@@ -88,5 +96,15 @@ fun StockListScreen(){
     verticalArrangement = Arrangement.Center
   ) {
     Text(text = "Stock List Screen")
+  }
+}
+
+@Composable
+fun SettingScreen(){
+  Column(
+    modifier = Modifier.fillMaxSize(),
+    verticalArrangement = Arrangement.Center
+  ) {
+    Text(text = "Setting Screen")
   }
 }
