@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -48,7 +49,11 @@ class MainActivity : ComponentActivity() {
               )
             },
           ){
-            NavHost(navController = navController, startDestination = BarItem.Home.route){
+            NavHost(
+              navController = navController,
+              startDestination = BarItem.Home.route,
+              modifier = Modifier.padding(top = it.calculateTopPadding(), bottom = it.calculateBottomPadding())
+            ){
               composable(route = BarItem.Home.route){
                 HomeScreen()
               }
@@ -86,16 +91,6 @@ fun ShoppingListScreen(){
     verticalArrangement = Arrangement.Center
   ) {
     Text(text = "Shopping List Screen")
-  }
-}
-
-@Composable
-fun StockListScreen(){
-  Column(
-    modifier = Modifier.fillMaxSize(),
-    verticalArrangement = Arrangement.Center
-  ) {
-    Text(text = "Stock List Screen")
   }
 }
 
