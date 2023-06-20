@@ -32,27 +32,34 @@ fun StockListScreen(){
   LazyColumn(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(10.dp),
-    verticalArrangement = Arrangement.spacedBy(10.dp),
+      .padding(horizontal = 10.dp),
   ) {
     val list = (0..75).map { it.toString() }
     items(count = list.size){
-      StockItem(name = "Name${it}")
+      StockItem(
+        name = "Name_${it}",
+        remainingQuantity = 70,
+        stock = 2
+      )
     }
   }
 }
 
 @Composable
 fun StockItem(
-  name: String
+  name: String,
+  remainingQuantity: Int,
+  stock: Int
 ){
   Row(
     modifier = Modifier
+      .padding(top = 10.dp, bottom = 10.dp)
       .fillMaxWidth()
       .clip(RoundedCornerShape(10.dp))
       .background(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
       .padding(10.dp),
-    verticalAlignment = Alignment.CenterVertically
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.SpaceAround
   ){
     Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
     Spacer(modifier = Modifier.width(10.dp))
@@ -70,9 +77,9 @@ fun StockItem(
       Row(
         modifier = Modifier.fillMaxWidth()
       ) {
-        Text(text = "残 70 %,")
+        Text(text = "残 $remainingQuantity %,")
         Spacer(modifier = Modifier.width(10.dp))
-        Text(text = "ストック数 : 2個")
+        Text(text = "ストック数 : $stock")
       }
 
       Spacer(modifier = Modifier.height(10.dp))
